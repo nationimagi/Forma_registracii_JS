@@ -1,0 +1,293 @@
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+
+ <title> Регистрация </title> 
+ 
+</head> 
+
+<form name="data">
+
+<h1 align=center> 
+	<font size=6 style=color:#4B0082>  
+	Регистрация 
+	</font>
+</h1> 
+
+<p align=center> <input type="text" name="sur" placeholder="Фамилия" 
+   size='22' maxlength='20'> </p>
+
+<p align=center> <input type="text" name="name" placeholder="Имя" 
+   size='22' maxlength='20'> </p>
+
+<p align=center> <input type="text" name="sec_name" placeholder="Отчество" 
+   size='22' maxlength='20'> </p>
+
+<p align=center> <input type="text" name="birthdate" placeholder="01.01.2000" 
+   size='22' maxlength='10'> </p>
+
+<p align=center> <input type="text" name="mail" placeholder="email@mail.ru" 
+   size='22' maxlength='30'> </p>
+
+<p align=center> 
+	<input type="button" value="Зарегистрироваться" onclick="calculate( );"> 
+</p>
+
+<body bgcolor="#B0C4DE">
+
+</body>
+
+</form>
+
+<!-- Конец формы -->
+
+<script language="JavaScript">
+
+function calculate( ) {
+
+	var s_f = document.data.sur.value;
+	var s_n = document.data.name.value;
+	var s_sn = document.data.sec_name.value;
+	var s_b = document.data.birthdate.value;
+	var s_m = document.data.mail.value;
+	
+	s_f = s_f.toLowerCase();
+	s_n = s_n.toLowerCase();
+	s_sn = s_sn.toLowerCase();
+	//
+	s_m = s_m.toLowerCase();
+	
+	var alph_fio = 'йцукенгшщзхъфывапролджэячсмитьбюё-';
+	
+	var s_err = "";
+	let c_err = 0;
+	var s_alert = "";
+	
+	//--------------------- ПУСТЫЕ ПОЛЯ
+	if ((s_f.length == 0) ||
+		(s_n.length == 0) ||
+		(s_sn.length == 0) || 
+		(s_b.length == 0) ||
+		(s_m.length == 0)) {
+			c_err = -1;
+	}
+	
+	if (c_err != -1) { //большой иф
+	//--------------------- ПОЛЕ 1 ФАМИЛИЯ
+	let c_a_f = 0; //счетчик
+	
+	for (let i=0; i<s_f.length; i++){
+		for (let j=0; j<alph_fio.length; j++){
+			if (s_f[i] == alph_fio[j]) c_a_f++;
+		}
+	}
+	
+	if (s_f.length != c_a_f) {
+		c_err++;
+		s_err=s_err+c_err+". Введите в поле 1 фамилию на кириллице. \n"
+	}
+	
+	//--------------------- ПОЛЕ 2 ИМЯ
+	c_a_f = 0; //обнуление счетчика
+	
+	for (let i=0; i<s_n.length; i++){
+		for (let j=0; j<alph_fio.length; j++){
+			if (s_n[i] == alph_fio[j]) c_a_f++;
+		}
+	}
+	
+	if (s_n.length != c_a_f) {
+		c_err++;
+		s_err=s_err+c_err+". Введите в поле 2 имя на кириллице. \n"
+	}
+	
+	//--------------------- ПОЛЕ 3 ОТЧЕСТВО
+	c_a_f = 0; //обнуление счетчика
+	
+	for (let i=0; i<s_sn.length; i++){
+		for (let j=0; j<alph_fio.length; j++){
+			if (s_sn[i] == alph_fio[j]) c_a_f++;
+		}
+	}
+	
+	if (s_sn.length != c_a_f) {
+		c_err++;
+		s_err=s_err+c_err+". Введите в поле 3 отчество на кириллице. \n"
+	}
+	
+	
+	//--------------------- ПОЛЕ 4 ДАТА
+	
+	var a2 = s_b.split('.');
+
+	//------------------- switch 
+	switch (true){	
+		//-------------------       проверка корректности ввода
+		case a2.length != 3:
+			c_err++;
+			s_err=s_err+c_err+". Проверьте корректность ввода данных в 4 поле. \nДанные должны быть в формате 01.01.2000\n";
+		break;
+		
+		//-------------------       номер дня меньше/равно 0
+		case a2[0] <= 0:
+			c_err++;
+			s_err=s_err+c_err+". Введите день от 1 до 31\n";
+		
+		//-------------------       месяц больше 12 или меньше/равно 0
+		case a2[1] > 12:
+		case a2[1] <= 0:
+			c_err++;
+			s_err=s_err+c_err+". Введите номер месяца от 1 до 12\n";
+		
+		//---------------- проверка года
+		case a2[2] < 1900:
+		case a2[2] > 2021:
+			c_err++;
+			s_err=s_err+c_err+". Вы живете вне нашего времени?\n";
+		
+		//--------------------      февраль
+		case a2[1]==2:
+
+		switch (true) {
+			case a2[0] > 28:
+			c_err++;
+			s_err=s_err+c_err+". В феврале 28 дней\n";	
+		}
+			
+		//-------------------       30 дней
+		case a2[1]==4: 					
+		case a2[1]==6: 
+		case a2[1]==9: 
+		case a2[1]==11: 
+			
+		switch (true) {
+			case a2[0] > 30:
+			c_err++;
+			s_err=s_err+c_err+". В этом месяце 30 дней\n";	
+		}
+			
+		//--------------------      больше 31 дней
+		case a2[1]==1: 					
+		case a2[1]==3: 
+		case a2[1]==5: 
+		case a2[1]==7: 
+		case a2[1]==8:
+		case a2[1]==10: 
+		case a2[1]==12: 		
+			
+		switch (true) {
+			case a2[0] > 31:
+			c_err++;
+			s_err=s_err+c_err+". В месяце не может быть больше 31 дня\n";	
+		}
+		
+	} //конец switch1	
+	
+	//--------------------- ПОЛЕ 5 ПОЧТА
+	
+	var alph_m1 = 'qwertyuiopasdfghjklzxcvbnm1234567890';
+	var alph_m23 = 'qwertyuiopasdfghjklzxcvbnm';
+	
+	var m1 = s_m.split('@');
+	var m23 = "";
+	
+	if (m1.length == 2) {
+		m23 = m1[1].split('.');
+	}
+	
+	//alert(alph_m1);
+	//alert(m1.length);
+	
+	switch (true){	
+		//-------------------       проверка корректности формата почты
+		case m1.length != 2:
+		case m23.length != 2:
+			c_err++;
+			s_err=s_err+c_err+". Проверьте корректность ввода данных в 5 поле. \nДанные должны быть в формате email@mail.ru\n";
+		break;
+		
+		//-------------------       проверка доменной зоны на количество символов
+		case m23[1].length < 2:
+		case m23[1].length > 6:
+			c_err++;
+			s_err=s_err+c_err+". Поле 5: длина доменной зоны должна быть от 2 до 6. \n";
+		break;
+		
+		//-------------------       проверка имени пользователя
+		case m1.length == 2:
+		
+			c_a_f = 0; //счетчик
+			
+			var m_name = m1[0];
+	
+			for (let i=0; i<m_name.length; i++){
+				for (let j=0; j<alph_m1.length; j++){
+					if (m_name[i] == alph_m1[j]) c_a_f++;
+				}
+			}
+			
+			if (m_name.length != c_a_f) {
+				c_err++;
+				s_err=s_err+c_err+". Поле 5: в имени пользователя могут быть только цифры и латинские буквы. \n";
+			}
+			
+		//-------------------       проверка домена 
+		case m23.length == 2:
+		
+			//-------------------       проверка имени сервера
+			c_a_f = 0; //счетчик
+			
+			var m_d1 = m23[0];
+	
+			for (let i=0; i<m_d1.length; i++){
+				for (let j=0; j<alph_m23.length; j++){
+					if (m_d1[i] == alph_m23[j]) c_a_f++;
+				}
+			}
+			
+			if (m_d1.length != c_a_f) {
+				c_err++;
+				s_err=s_err+c_err+". Поле 5: в имени сервера могут быть только латинские буквы. \n";
+			}
+			
+			//-------------------       проверка доменной зоны
+			c_a_f = 0; //счетчик
+			
+			var m_d2 = m23[1];
+			
+			for (let i=0; i<m_d2.length; i++){
+				for (let j=0; j<alph_m23.length; j++){
+					if (m_d2[i] == alph_m23[j]) c_a_f++;
+				}
+			}
+			
+			if (m_d2.length != c_a_f) {
+				c_err++;
+				s_err=s_err+c_err+". Поле 5: в доменной зоне почты могут быть только латинские буквы. \n";
+			}
+		
+	} //конец switch2 
+	
+	} //конец большого ифа
+	
+	//--------------------- вывод ошибки или все хорошо
+	//alert(c_err);
+	
+	s_alert = "!Обнаружено " + c_err + " ошибок!\n" + s_err;
+	
+	switch (c_err){
+	
+		case -1:
+			alert("Пожалуйста, заполните все поля. ");
+		break;
+		
+		case 0: 
+			alert("Все супер!");
+		break;
+		
+		default:
+			alert(s_alert);
+	}
+
+} //конец функции
+
+</script>
